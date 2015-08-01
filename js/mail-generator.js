@@ -21,6 +21,7 @@ function generateMessage(date){
 	message.subject = getRandomElement(subject);
 	message.sender = getRandomElement(sender);
 	message.body = getRandomElement(body);
+	window.geemails.push(message);
 	return message;
 }
 

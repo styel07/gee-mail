@@ -1,18 +1,85 @@
 <html>
 	<head>
-		<script src="js/mail-generator.js"></script>
 		<link href="css/style.css" rel="stylesheet" media="screen">
+		<script type="text/javascript" src="js/mail-generator.js"></script>
     <script>
       window.onload = function(){
-        // ALL OF YOUR JAVASCRIPT CODE SHOULD GO HERE. 
-        // We have to use window.onload so your JavaScript doesn't execute until the page has loaded and all HTML has been downloaded to your browser
-        
-      };
+      	var counter = 0;
+		for(var index = 0; index < window.geemails.length; index++){
+//display messages
+		displayMessage();	   	
+		}
+//		console.log(geemails.length);
+		
+		countMsg = function()
+		{
+			var count = document.getElementById('count');
+			count.innerHTML = window.geemails.length;
+		}
+//		object for creating visual message per 
+        //var createMessage ={};
+        function displayMessage(){
+        var message = document.getElementById('message');
+	    
+	    var date = document.createElement('div');
+	    date.id="date";
+	    date.innerHTML = window.geemails[index].date;
+	    message.appendChild(date);
+
+   	    var sender = document.createElement('div');
+	    sender.id="sender";
+	    sender.innerHTML = window.geemails[index].sender;
+	    message.appendChild(sender);
+
+  	    var subject = document.createElement('div');
+	    subject.id="subject";
+	    subject.innerHTML = window.geemails[index].subject;
+	    message.appendChild(subject);	
+
+	    var body = document.createElement('div');
+	    body.className="msgHide";
+	    body.id="bodyDisp"+ ++counter;
+	    body.innerHTML = window.geemails[index].body;
+	    message.appendChild(body);	
+
+	    index++;
+		}
+
+//		creates a new message every 7 seconds	   	
+	   	setInterval(function(){ 
+	    	var message = generateMessage();
+	    	//geemails++ count
+	    	
+		    var dispMsg = displayMessage();
+		    countMsg();
+	    }, 4000);	
+    
+var children = document.getElementsByClassName('msgHide');
+
+for (var i = 0; i < children.length; i++) {
+    var selected = children[i].addEventListener('click',hideMessage);
+    alert(selected);
+}
+
+function hideMessage (event) {
+    // code goes here
+    //return children[i].style.display="none";
+    //console.log("hi");
+}
+
+}
     </script>
 	</head>
 	<body>
 		<div class="container" id="main">
-			Build Me!
+			<header>
+				<h1>Messege App</h1>
+			</header>
+			<!-- code here for messege-->
+			
+			<h2>Total Messages: <p id='count'></p></h2>	
+
+			<div id="message"></div>
 		</div>
 	</body>
 </html>
