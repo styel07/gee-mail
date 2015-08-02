@@ -5,81 +5,108 @@
     <script>
       window.onload = function(){
       	var counter = 0;
+
 		for(var index = 0; index < window.geemails.length; index++){
-//display messages
-		displayMessage();	   	
+			displayMessage();	   	
 		}
-//		console.log(geemails.length);
 		
-		countMsg = function()
-		{
-			var count = document.getElementById('count');
-			count.innerHTML = window.geemails.length;
-		}
-//		object for creating visual message per 
-        //var createMessage ={};
-        function displayMessage(){
-        var message = document.getElementById('message');
-	    
-	    var date = document.createElement('div');
-	    date.id="date";
-	    date.innerHTML = window.geemails[index].date;
-	    message.appendChild(date);
-
-   	    var sender = document.createElement('div');
-	    sender.id="sender";
-	    sender.innerHTML = window.geemails[index].sender;
-	    message.appendChild(sender);
-
-  	    var subject = document.createElement('div');
-	    subject.id="subject";
-	    subject.innerHTML = window.geemails[index].subject;
-	    message.appendChild(subject);	
-
-	    var body = document.createElement('div');
-	    body.className="msgHide";
-	    body.id="bodyDisp"+ ++counter;
-	    body.innerHTML = window.geemails[index].body;
-	    message.appendChild(body);	
-
-	    index++;
-		}
-
-//		creates a new message every 7 seconds	   	
+		//Creates a new message every 4 seconds	and displays new message 	
 	   	setInterval(function(){ 
-	    	var message = generateMessage();
-	    	//geemails++ count
-	    	
-		    var dispMsg = displayMessage();
+	    	var message = getNewMessage();
+		 	displayMessage();
 		    countMsg();
-	    }, 4000);	
-    
-var children = document.getElementsByClassName('msgHide');
+	    }, 4000);
 
-for (var i = 0; i < children.length; i++) {
-    var selected = children[i].addEventListener('click',hideMessage);
-    alert(selected);
-}
+		//Function that appends total messages
+		countMsg = function(){
+			var count = document.getElementById('count');
+			var countInit = window.geemails.length - 10;
+			count.innerHTML = 'Total Messages: '+ countInit;
+		}
+		//Function for displaying all elements of a message
+        function displayMessage(){
+	        var message = document.getElementById('message-container');
+	        var message1 = document.createElement('div');	
+	        message1.id="message";
+     		
+		    var date = document.createElement('div');
+		    date.id="date";
+		    date.innerHTML = window.geemails[index].date;
 
-function hideMessage (event) {
-    // code goes here
-    //return children[i].style.display="none";
-    //console.log("hi");
-}
+	   	    var sender = document.createElement('div');
+		    sender.id="sender";
+		    sender.innerHTML = window.geemails[index].sender;
+		    
+	  	    var subject = document.createElement('div');
+		    subject.id="subject";
+		    subject.innerHTML = window.geemails[index].subject;
 
+   	  	    var openStat = document.createElement('div');
+		    openStat.id="open";
+		    openStat.innerHTML = "Unopened";
+
+		    var body1 = document.createElement('div');
+		    body1.className="msgHide";
+		    body1.innerHTML = window.geemails[index].body;
+
+		    var space = document.createElement('div');
+		    space.id="space";
+		    	
+		    //Append the date, sender, subject and body to message div
+			message.appendChild(message1);	    
+			message1.appendChild(sender);
+			message1.appendChild(date);
+			message1.appendChild(subject);
+			message1.appendChild(openStat);
+		    message1.appendChild(body1);
+		    message1.appendChild(space);		    
+		    index++;
+		
+			//Changes the display property the body to either none or inline 		
+ 			toggle = function (event){
+    			if (body1.style.display != "inline"){
+    				//Checks if message was already opened if not increase counter 
+    				if(body1.id != "opened"){
+    					body1.style.display = "inline";
+	    				counter++;    					
+	    				updateRead();
+	    				openStat.innerHTML = 'Opened';
+    					openStat.style.color = '#008A00';
+    					message1.style.background="#99E699";
+    				}
+    				else{	
+    					body1.style.display = "inline";
+    					
+    				}
+					body1.id="opened";
+    			} 
+    			else if(body1.style.display == "inline"){
+    				body1.style.display = "none";
+    			}		
+    		}
+    		//Bind the event to the message div based on selected message
+    		message1.addEventListener('click',toggle.bind(this));
+		
+    	//Increments Read Message counter
+		updateRead = function(){
+			var read = document.getElementById('read');
+			read.innerHTML = 'Opened: '+counter;
+		}
+	}
 }
     </script>
 	</head>
 	<body>
-		<div class="container" id="main">
+		<div class="container">
 			<header>
 				<h1>Messege App</h1>
 			</header>
-			<!-- code here for messege-->
-			
-			<h2>Total Messages: <p id='count'></p></h2>	
-
-			<div id="message"></div>
+			<div id='notification'>
+				<h2 id='count'>Total Messages: 10</h2>	
+				<h2 id='read'>Opened: 0</h2>
+			</div>
+			<div id ="space"></div>
+			<div id="message-container"></div>
 		</div>
 	</body>
 </html>
